@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { registerScan } from "./commands/scan.js";
 import { registerQuery } from "./commands/query.js";
 import { registerInit } from "./commands/init.js";
+import { registerUi } from "./commands/ui.js";
 import { setLogLevel } from "../util/logger.js";
 import { CodevizError } from "../util/errors.js";
 
@@ -25,6 +26,7 @@ export async function main(argv: string[]): Promise<void> {
   registerScan(program);
   registerQuery(program);
   registerInit(program);
+  registerUi(program);
 
   try {
     await program.parseAsync(argv);

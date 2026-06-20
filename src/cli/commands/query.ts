@@ -1,29 +1,12 @@
 import { Command } from "commander";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
-import type { CodevizGraph } from "../../ir/types.js";
-import { GraphIndex } from "../../query/graph.js";
 import { focus, subgraphToGraph } from "../../query/focus.js";
 import { layerFilter } from "../../query/layer-filter.js";
 import { shortestPath } from "../../query/path.js";
 import { serviceMap } from "../../query/service-map.js";
 import { contractFor } from "../../query/contract.js";
 import { declaredPatterns } from "../../query/patterns.js";
-import { CodevizError } from "../../util/errors.js";
-
-function loadGraph(graphPath: string): GraphIndex {
-  let raw: string;
-  try {
-    raw = readFileSync(resolve(graphPath), "utf8");
-  } catch (err) {
-    throw new CodevizError(
-      `could not read graph at ${graphPath}: ${(err as Error).message}`,
-      "Run `codeviz scan` first to produce .codeviz/graph.json.",
-    );
-  }
-  const graph = JSON.parse(raw) as CodevizGraph;
-  return GraphIndex.from(graph);
-}
+import { boundaries } from "../../query/boundaries.js";
+import { loadGraph } from "../load-graph.js";
 
 function emit(json: boolean, data: unknown, text: () => void): void {
   if (json) console.log(JSON.stringify(data, null, 2));
@@ -110,6 +93,16 @@ export function registerQuery(program: Command): void {
           console.log(g.name);
           for (const p of g.participants) console.log(`  ${p.displayName}${p.role ? ` (${p.role})` : ""}`);
         }
+      });
+    });
+
+  graphOpt(query.command("boundaries"))
+    .action((opts) => {
+      const index = loadGraph(opts.graph);
+      const list = boundaries(index);
+      emit(opts.json, list, () => {
+        if (list.length === 0) return console.log("no boundary nodes");
+        for (const b of list) console.log(`${b.displayName}${b.note ? ` — ${b.note}` : ""}`);
       });
     });
 }

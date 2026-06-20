@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>codeviz</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header id="topbar">
+        <span class="brand">codeviz</span>
+        <input id="search" type="search" placeholder="Search nodes…" autocomplete="off" />
+        <span id="layer-chips" class="chips"></span>
+        <span class="spacer"></span>
+        <span id="coverage" class="coverage"></span>
+        <button id="reset-btn" title="Show the full graph">Reset</button>
+      </header>
+      <main>
+        <div id="cy"></div>
+        <aside id="sidebar">
+          <nav id="tabs">
+            <button data-tab="inspector" class="active">Inspector</button>
+            <button data-tab="services">Services</button>
+            <button data-tab="patterns">Patterns</button>
+            <button data-tab="findings">Findings</button>
+            <button data-tab="path">Path</button>
+          </nav>
+          <section id="panel"></section>
+        </aside>
+      </main>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

@@ -6,6 +6,7 @@ import { shortestPath } from "../../src/query/path.js";
 import { serviceMap } from "../../src/query/service-map.js";
 import { contractFor } from "../../src/query/contract.js";
 import { layerFilter } from "../../src/query/layer-filter.js";
+import { boundaries } from "../../src/query/boundaries.js";
 import type { LayerConfig } from "../../src/discovery/config.js";
 import { call, cls, dec, fn, fromImport, mod } from "./helpers.js";
 
@@ -34,7 +35,12 @@ function ordersGraph() {
             decorators: [dec("entrypoint", { kwargs: { kind: "http" } }), dec("contract", { kwargs: { output: "Order" }, type_ref_kwargs: ["output"] })],
             calls: [call(["self", "inventory", "reserve"]), call(["self", "charge"])],
           }),
-          fn("charge", { decorators: [dec("uses_service", { args: ["stripe"], kwargs: { op: "charge" } })] }),
+          fn("charge", {
+            decorators: [
+              dec("uses_service", { args: ["stripe"], kwargs: { op: "charge" } }),
+              dec("boundary", { args: ["payment integration"] }),
+            ],
+          }),
         ],
       }),
     ],
@@ -83,5 +89,12 @@ describe("query engine", () => {
     const sub = layerFilter(index, ["domain"], 0);
     expect(sub.nodes.every((n) => n.layer === "domain")).toBe(true);
     expect(sub.nodes.length).toBeGreaterThan(0);
+  });
+
+  it("lists nodes marked with @boundary, with their note", () => {
+    const list = boundaries(index);
+    expect(list).toHaveLength(1);
+    expect(list[0]!.id).toBe("domain.order_service.OrderService.charge");
+    expect(list[0]!.note).toBe("payment integration");
   });
 });
