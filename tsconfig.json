@@ -18,5 +18,6 @@
     "sourceMap": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["ui", "dist"]
 }
