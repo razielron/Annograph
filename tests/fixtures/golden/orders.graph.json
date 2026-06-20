@@ -1,0 +1,339 @@
+{
+  "version": "0.2",
+  "layers": [
+    {
+      "id": "presentation",
+      "order": 0,
+      "mayDependOn": [
+        "domain"
+      ]
+    },
+    {
+      "id": "domain",
+      "order": 1,
+      "mayDependOn": [
+        "data",
+        "integration"
+      ]
+    },
+    {
+      "id": "data",
+      "order": 2,
+      "mayDependOn": []
+    },
+    {
+      "id": "integration",
+      "order": 3,
+      "mayDependOn": []
+    }
+  ],
+  "services": [
+    {
+      "id": "service:stripe",
+      "operations": [
+        "charge"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "domain.inventory_service",
+      "kind": "module",
+      "name": "domain.inventory_service",
+      "displayName": "inventory_service",
+      "tags": [],
+      "source": {
+        "file": "domain/inventory_service.py",
+        "line": 1
+      },
+      "lang": "python"
+    },
+    {
+      "id": "domain.inventory_service.InventoryService",
+      "kind": "class",
+      "name": "InventoryService",
+      "displayName": "inventory_service.InventoryService",
+      "tags": [
+        "inventory"
+      ],
+      "layer": "domain",
+      "source": {
+        "file": "domain/inventory_service.py",
+        "line": 5
+      },
+      "lang": "python"
+    },
+    {
+      "id": "domain.inventory_service.InventoryService.reserve",
+      "kind": "function",
+      "name": "reserve",
+      "displayName": "InventoryService.reserve",
+      "tags": [],
+      "layer": "domain",
+      "contract": {
+        "output": {
+          "ref": "bool"
+        }
+      },
+      "source": {
+        "file": "domain/inventory_service.py",
+        "line": 6
+      },
+      "lang": "python"
+    },
+    {
+      "id": "domain.order_service",
+      "kind": "module",
+      "name": "domain.order_service",
+      "displayName": "order_service",
+      "tags": [],
+      "source": {
+        "file": "domain/order_service.py",
+        "line": 1
+      },
+      "lang": "python"
+    },
+    {
+      "id": "domain.order_service.OrderService",
+      "kind": "class",
+      "name": "OrderService",
+      "displayName": "order_service.OrderService",
+      "tags": [
+        "critical",
+        "orders"
+      ],
+      "layer": "domain",
+      "source": {
+        "file": "domain/order_service.py",
+        "line": 6
+      },
+      "lang": "python"
+    },
+    {
+      "id": "domain.order_service.OrderService.__init__",
+      "kind": "function",
+      "name": "__init__",
+      "displayName": "OrderService.__init__",
+      "tags": [],
+      "layer": "domain",
+      "contract": {
+        "input": {
+          "ref": "InventoryService"
+        }
+      },
+      "source": {
+        "file": "domain/order_service.py",
+        "line": 7
+      },
+      "lang": "python"
+    },
+    {
+      "id": "domain.order_service.OrderService._charge",
+      "kind": "function",
+      "name": "_charge",
+      "displayName": "OrderService._charge",
+      "tags": [],
+      "layer": "domain",
+      "source": {
+        "file": "domain/order_service.py",
+        "line": 17
+      },
+      "lang": "python"
+    },
+    {
+      "id": "domain.order_service.OrderService.create_order",
+      "kind": "entrypoint",
+      "name": "create_order",
+      "displayName": "OrderService.create_order",
+      "tags": [],
+      "layer": "domain",
+      "entrypoint": {
+        "kind": "http",
+        "path": "POST /orders"
+      },
+      "contract": {
+        "input": {
+          "ref": "CreateOrderRequest"
+        },
+        "output": {
+          "ref": "Order"
+        },
+        "errors": [
+          "OutOfStock",
+          "PaymentFailed"
+        ]
+      },
+      "source": {
+        "file": "domain/order_service.py",
+        "line": 12
+      },
+      "lang": "python"
+    },
+    {
+      "id": "integration.payment",
+      "kind": "module",
+      "name": "integration.payment",
+      "displayName": "payment",
+      "tags": [],
+      "source": {
+        "file": "integration/payment.py",
+        "line": 1
+      },
+      "lang": "python"
+    },
+    {
+      "id": "integration.payment.StripeMethod",
+      "kind": "class",
+      "name": "StripeMethod",
+      "displayName": "payment.StripeMethod",
+      "tags": [],
+      "layer": "integration",
+      "patterns": [
+        {
+          "name": "strategy",
+          "declared": true,
+          "role": "concrete"
+        }
+      ],
+      "source": {
+        "file": "integration/payment.py",
+        "line": 6
+      },
+      "lang": "python"
+    },
+    {
+      "id": "integration.payment.StripeMethod.pay",
+      "kind": "function",
+      "name": "pay",
+      "displayName": "StripeMethod.pay",
+      "tags": [],
+      "layer": "integration",
+      "source": {
+        "file": "integration/payment.py",
+        "line": 7
+      },
+      "lang": "python"
+    },
+    {
+      "id": "presentation.api",
+      "kind": "module",
+      "name": "presentation.api",
+      "displayName": "api",
+      "tags": [],
+      "source": {
+        "file": "presentation/api.py",
+        "line": 1
+      },
+      "lang": "python"
+    },
+    {
+      "id": "presentation.api.OrderController",
+      "kind": "class",
+      "name": "OrderController",
+      "displayName": "api.OrderController",
+      "tags": [
+        "http"
+      ],
+      "layer": "presentation",
+      "source": {
+        "file": "presentation/api.py",
+        "line": 6
+      },
+      "lang": "python"
+    },
+    {
+      "id": "presentation.api.OrderController.__init__",
+      "kind": "function",
+      "name": "__init__",
+      "displayName": "OrderController.__init__",
+      "tags": [],
+      "layer": "presentation",
+      "contract": {
+        "input": {
+          "ref": "OrderService"
+        }
+      },
+      "source": {
+        "file": "presentation/api.py",
+        "line": 7
+      },
+      "lang": "python"
+    },
+    {
+      "id": "presentation.api.OrderController.post_order",
+      "kind": "entrypoint",
+      "name": "post_order",
+      "displayName": "OrderController.post_order",
+      "tags": [],
+      "layer": "presentation",
+      "entrypoint": {
+        "kind": "http",
+        "path": "POST /api/orders"
+      },
+      "source": {
+        "file": "presentation/api.py",
+        "line": 11
+      },
+      "lang": "python"
+    },
+    {
+      "id": "service:stripe",
+      "kind": "service",
+      "name": "stripe",
+      "displayName": "stripe",
+      "tags": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "domain.order_service",
+      "to": "domain.inventory_service",
+      "kind": "imports",
+      "inferred": true
+    },
+    {
+      "from": "domain.order_service.OrderService._charge",
+      "to": "service:stripe",
+      "kind": "uses-service",
+      "inferred": false,
+      "op": "charge"
+    },
+    {
+      "from": "domain.order_service.OrderService.create_order",
+      "to": "domain.inventory_service.InventoryService.reserve",
+      "kind": "calls",
+      "inferred": true,
+      "source": {
+        "file": "domain/order_service.py",
+        "line": 13
+      }
+    },
+    {
+      "from": "domain.order_service.OrderService.create_order",
+      "to": "domain.order_service.OrderService._charge",
+      "kind": "calls",
+      "inferred": true,
+      "source": {
+        "file": "domain/order_service.py",
+        "line": 14
+      }
+    },
+    {
+      "from": "presentation.api",
+      "to": "domain.order_service",
+      "kind": "imports",
+      "inferred": true
+    },
+    {
+      "from": "presentation.api.OrderController.post_order",
+      "to": "domain.order_service.OrderService.create_order",
+      "kind": "calls",
+      "inferred": true,
+      "source": {
+        "file": "presentation/api.py",
+        "line": 12
+      }
+    }
+  ],
+  "patterns_detected": []
+}

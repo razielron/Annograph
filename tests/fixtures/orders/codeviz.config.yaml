@@ -1,0 +1,9 @@
+root: "."
+layers:
+  - { id: presentation, order: 0, mayDependOn: [domain] }
+  - { id: domain,       order: 1, mayDependOn: [data, integration] }
+  - { id: data,         order: 2, mayDependOn: [] }
+  - { id: integration,  order: 3, mayDependOn: [] }
+check:
+  minCoverage: 0.0
+  failOn: [layer-violation, cycle]

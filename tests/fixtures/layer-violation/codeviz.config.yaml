@@ -1,0 +1,7 @@
+root: "."
+layers:
+  - { id: presentation, order: 0, mayDependOn: [domain] }
+  - { id: domain,       order: 1, mayDependOn: [data] }
+  - { id: data,         order: 2, mayDependOn: [] }
+check:
+  failOn: [layer-violation]

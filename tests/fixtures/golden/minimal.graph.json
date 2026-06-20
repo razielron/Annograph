@@ -1,0 +1,108 @@
+{
+  "version": "0.2",
+  "layers": [],
+  "services": [],
+  "nodes": [
+    {
+      "id": "pkg.a",
+      "kind": "module",
+      "name": "pkg.a",
+      "displayName": "a",
+      "tags": [],
+      "source": {
+        "file": "pkg/a.py",
+        "line": 1
+      },
+      "lang": "python"
+    },
+    {
+      "id": "pkg.a.Widget",
+      "kind": "class",
+      "name": "Widget",
+      "displayName": "a.Widget",
+      "tags": [],
+      "source": {
+        "file": "pkg/a.py",
+        "line": 8
+      },
+      "lang": "python"
+    },
+    {
+      "id": "pkg.a.Widget.render",
+      "kind": "function",
+      "name": "render",
+      "displayName": "Widget.render",
+      "tags": [],
+      "source": {
+        "file": "pkg/a.py",
+        "line": 9
+      },
+      "lang": "python"
+    },
+    {
+      "id": "pkg.a.run",
+      "kind": "function",
+      "name": "run",
+      "displayName": "a.run",
+      "tags": [],
+      "source": {
+        "file": "pkg/a.py",
+        "line": 4
+      },
+      "lang": "python"
+    },
+    {
+      "id": "pkg.b",
+      "kind": "module",
+      "name": "pkg.b",
+      "displayName": "b",
+      "tags": [],
+      "source": {
+        "file": "pkg/b.py",
+        "line": 1
+      },
+      "lang": "python"
+    },
+    {
+      "id": "pkg.b.helper",
+      "kind": "function",
+      "name": "helper",
+      "displayName": "b.helper",
+      "tags": [],
+      "source": {
+        "file": "pkg/b.py",
+        "line": 1
+      },
+      "lang": "python"
+    }
+  ],
+  "edges": [
+    {
+      "from": "pkg.a",
+      "to": "pkg.b",
+      "kind": "imports",
+      "inferred": true
+    },
+    {
+      "from": "pkg.a.Widget.render",
+      "to": "pkg.a.run",
+      "kind": "calls",
+      "inferred": true,
+      "source": {
+        "file": "pkg/a.py",
+        "line": 10
+      }
+    },
+    {
+      "from": "pkg.a.run",
+      "to": "pkg.b.helper",
+      "kind": "calls",
+      "inferred": true,
+      "source": {
+        "file": "pkg/a.py",
+        "line": 5
+      }
+    }
+  ],
+  "patterns_detected": []
+}
